@@ -3,9 +3,8 @@ import react from "@vitejs/plugin-react"
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa"
 
 const pwaOptions: Partial<VitePWAOptions> = {
-    mode: "production",
-    base: "/",
-    includeAssets: ["favicon.svg"],
+    registerType: "autoUpdate",
+    includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
     manifest: {
         name: "React Map",
         short_name: "React Map",
@@ -30,7 +29,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
                 purpose: "apple touch icon",
             },
             {
-                src: "/maskable_icon.png",
+                src: "/android-chrome-512x512.png",
                 sizes: "512x512",
                 type: "image/png",
                 purpose: "any maskable",
