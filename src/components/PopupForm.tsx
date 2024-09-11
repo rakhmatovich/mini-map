@@ -11,7 +11,7 @@ export default function PopupForm({ handleSubmit, details, status }: Props) {
     const [statusValue, setStatusValue] = useState(status)
 
     return (
-        <form onSubmit={handleSubmit} data-test-id="update-form">
+        <form onSubmit={handleSubmit} data-test-id="popup-form">
             <div>
                 <label htmlFor="detail">Details:</label>
                 <textarea

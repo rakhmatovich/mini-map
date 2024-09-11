@@ -47,7 +47,7 @@ export default function MapComponent() {
                 className="min-w-[280px] px-2 py-2 rounded-[10px] border-solid border-[#cccccc] absolute top-3 left-1/2 -translate-x-1/2 flex bg-white gap-2"
             >
                 {selectedFeature && (
-                    <div className="flex-1">
+                    <div className="flex-1" data-test-id="popup">
                         {isEditing ? (
                             <PopupForm
                                 details={selectedFeature.get("details")}
@@ -55,7 +55,7 @@ export default function MapComponent() {
                                 handleSubmit={handleUpdateFeature}
                             />
                         ) : (
-                            <p>{selectedFeature.get("details")}</p>
+                            <p data-test-id="popup-detail">{selectedFeature.get("details")}</p>
                         )}
                     </div>
                 )}
