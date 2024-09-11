@@ -5,20 +5,27 @@ import OSM from "ol/source/OSM"
 import Overlay from "ol/Overlay"
 import Point from "ol/geom/Point"
 import Feature, { FeatureLike } from "ol/Feature"
-import { RefObject, useContext, useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Map, View } from "ol"
 import { fromLonLat } from "ol/proj"
 import { Circle as CircleStyle, Fill, Stroke, Style } from "ol/style"
-import { MapContext } from "./MapProvider.tsx"
+import { CoordinateType, defaultCoordinates } from "../utils/coordinates.ts"
 
-type Props = {
-    setSelectedFeature: (feature: Feature<Point> | null) => void
-    popupContainerRef: RefObject<HTMLDivElement>
-    popupCloserRef: RefObject<HTMLButtonElement>
+type UpdateCoordinateProps = {
+    coordinateId: number
+    status: boolean
+    details: string
 }
 
-export default function MapInitializer({ setSelectedFeature, popupContainerRef, popupCloserRef }: Props) {
-    const { coordinates, setIsEditing } = useContext(MapContext)
+export default function useMap() {
+    const [coordinates, setCoordinates] = useState<CoordinateType[]>(
+        JSON.parse(localStorage.getItem("coordinates") || "null") || defaultCoordinates
+    )
+    const [isEditing, setIsEditing] = useState(false)
+    const [selectedFeature, setSelectedFeature] = useState<Feature<Point> | null>(null)
+
+    const popupContainerRef = useRef<HTMLDivElement | null>(null)
+    const popupCloserRef = useRef<HTMLButtonElement | null>(null)
 
     useEffect(() => {
         const osmLayer = new TileLayer({
@@ -28,19 +35,19 @@ export default function MapInitializer({ setSelectedFeature, popupContainerRef, 
 
         const vectorSource = new VectorSource()
 
-        coordinates.forEach((coord) => {
+        coordinates.forEach((coordinate) => {
             const pointFeature = new Feature({
-                geometry: new Point(fromLonLat([coord.longitude, coord.latitude])),
-                details: coord.details,
-                status: coord.status,
-                coordinateId: coord.id,
+                geometry: new Point(fromLonLat([coordinate.longitude, coordinate.latitude])),
+                details: coordinate.details,
+                status: coordinate.status,
+                coordinateId: coordinate.id,
             })
 
             pointFeature.setStyle(
                 new Style({
                     image: new CircleStyle({
                         radius: 7,
-                        fill: new Fill({ color: coord.status ? "green" : "red" }),
+                        fill: new Fill({ color: coordinate.status ? "green" : "red" }),
                         stroke: new Stroke({ color: "white", width: 2 }),
                     }),
                 })
@@ -96,7 +103,29 @@ export default function MapInitializer({ setSelectedFeature, popupContainerRef, 
         }
 
         return () => olMap.setTarget(undefined)
-    }, [popupContainerRef, popupCloserRef, setSelectedFeature])
+    }, [])
 
-    return null
+    const updateCoordinate = ({ coordinateId, status, details }: UpdateCoordinateProps) => {
+        const newCoordinates = coordinates.map((coordinate) => {
+            if (coordinate.id === coordinateId) {
+                coordinate.status = status
+                coordinate.details = details
+            }
+            return coordinate
+        })
+
+        setCoordinates(newCoordinates)
+        localStorage.setItem("coordinates", JSON.stringify(newCoordinates))
+    }
+
+    return {
+        coordinates,
+        updateCoordinate,
+        isEditing,
+        setIsEditing,
+        popupContainerRef,
+        popupCloserRef,
+        setSelectedFeature,
+        selectedFeature,
+    }
 }

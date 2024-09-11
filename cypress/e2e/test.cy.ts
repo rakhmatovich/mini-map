@@ -12,6 +12,7 @@ describe("Coordinates", () => {
         // viewport should be 1000px by 660px
         cy.get("#map").click(550, 270)
         cy.get('[data-test-id="popup-closer"]').click()
+        // TODO: check the result
     })
 })
 
@@ -21,8 +22,9 @@ describe("Coordinate edit", () => {
         // viewport should be 1000px by 660px
         cy.get("#map").click(550, 270)
         cy.get('[data-test-id="popup-edit"]').click()
-        cy.get('[data-test-id="popup-details"]').type("Service was below expectations.")
+        cy.get('[data-test-id="popup-detail"]').type("Service was below expectations.")
         cy.get('[data-test-id="popup-status"]').uncheck()
         cy.get('[data-test-id="update-form"]').submit()
+        // TODO: check the result
     })
 })
