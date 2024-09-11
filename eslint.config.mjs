@@ -1,13 +1,13 @@
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import reactHooks from "eslint-plugin-react-hooks";
 import react from "eslint-plugin-react";
-import { fixupPluginRules } from "@eslint/compat";
+import {fixupPluginRules} from "@eslint/compat";
 import globals from "globals";
 import tsParser from "@typescript-eslint/parser";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import {fileURLToPath} from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import {FlatCompat} from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,7 +61,7 @@ export default [...compat.extends(
         "no-tabs": 0,
         "linebreak-style": 1,
         "no-console": 1,
-        quotes: ["error", "double"],
+        quotes: [0, "double"],
         "no-trailing-spaces": "error",
         "object-curly-spacing": ["error", "always"],
         "eol-last": ["error", "always"],

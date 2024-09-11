@@ -73,6 +73,7 @@ export default function MapInitializer({ setSelectedFeature, popupContainerRef, 
 
         olMap.on("singleclick", function (event) {
             overlay.setPosition(undefined)
+            setIsEditing(false)
 
             olMap.forEachFeatureAtPixel(event.pixel, function (feature: FeatureLike) {
                 if (feature instanceof Feature && feature.getGeometry() instanceof Point) {
